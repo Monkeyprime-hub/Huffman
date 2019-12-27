@@ -14,7 +14,7 @@ import java.io.EOFException;
 public class HuffmaaanLetsGo {
     private static final byte ENCODING_TABLE_SIZE = 127;
 
-    public  void compress(String stringPath) throws IOException {
+    public void compress(String stringPath) throws IOException {
         List<String> stringList;
         File inputFile = new File(stringPath);
         String s = "";
@@ -42,7 +42,7 @@ public class HuffmaaanLetsGo {
 
         //создаем файлик
 
-        table = new File(inputFile.getAbsolutePath() + ".table.txt");
+        table = new File(inputFile.getAbsolutePath() + ".table");
         table.createNewFile();
         try (FileOutput fo = new FileOutput(table)) {
             fo.writeString(operator.getEncodingTable());
@@ -53,44 +53,47 @@ public class HuffmaaanLetsGo {
 
     }
 
-    public  void extract(String filePath, String tablePath) throws FileNotFoundException, IOException {
-        HuffmanOperator operator = new HuffmanOperator();
-        File compressedFile = new File(filePath),
-                tableFile = new File(tablePath),
-                extractedFile = new File(filePath + ".hf");
-        String compressed = "";
-        String[] encodingArray = new String[ENCODING_TABLE_SIZE];
+    public void extract(String filePath, String tablePath) throws FileNotFoundException, IOException {
+        if (filePath.endsWith(".hf")) {
 
-        try (FileInput fileInput = new FileInput(compressedFile)) {
-            byte b;
-            while (true) {
-                b = fileInput.readByte();
-                compressed += String.format("%8s", Integer.toBinaryString(b & 0xff)).replace(" ", "0");
+            HuffmanOperator operator = new HuffmanOperator();
+            File compressedFile = new File(filePath),
+                    tableFile = new File(tablePath),
+                    extractedFile = new File(filePath + "q");
+            String compressed = "";
+            String[] encodingArray = new String[ENCODING_TABLE_SIZE];
+
+            try (FileInput fileInput = new FileInput(compressedFile)) {
+                byte b;
+                while (true) {
+                    b = fileInput.readByte();
+                    compressed += String.format("%8s", Integer.toBinaryString(b & 0xff)).replace(" ", "0");
+                }
+            } catch (EOFException e) {
+
             }
-        } catch (EOFException e) {
-
-        }
 
 
-
-        // Туть мы читаем таблицу
-        try (FileInput fi = new FileInput(tableFile)) {
-            fi.readLine();
-            encodingArray[(byte)'\n'] = fi.readLine();
-            while (true) {
-                String s = fi.readLine();
-                if (s == null)
-                    throw new EOFException();
-                encodingArray[(byte)s.charAt(0)] = s.substring(1, s.length());
+            // Туть мы читаем таблицу
+            try (FileInput fi = new FileInput(tableFile)) {
+                fi.readLine();
+                encodingArray[(byte) '\n'] = fi.readLine();
+                while (true) {
+                    String s = fi.readLine();
+                    if (s == null)
+                        throw new EOFException();
+                    encodingArray[(byte) s.charAt(0)] = s.substring(1, s.length());
+                }
+            } catch (EOFException ignore) {
             }
-        } catch (EOFException ignore) {}
 
-        extractedFile.createNewFile();
-        //extract:
-        try (FileOutput fo = new FileOutput(extractedFile)) {
-            fo.writeString(operator.extract(compressed, encodingArray));
-        }
+            extractedFile.createNewFile();
+            //extract:
+            try (FileOutput fo = new FileOutput(extractedFile)) {
+                fo.writeString(operator.extract(compressed, encodingArray));
+            }
 
-        System.out.println("Путь к файлу " + extractedFile.getAbsolutePath());
+            System.out.println("Путь к файлу " + extractedFile.getAbsolutePath());
+        } else System.out.println("Не для тебя роза росла!");
     }
 }

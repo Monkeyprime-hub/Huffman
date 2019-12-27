@@ -23,21 +23,21 @@ public class HuffmanOperator {
 
     private String getCompressedString() {
         String compressed = "";
-        String intermidiate = "";
+        String tmpString = "";
 
         //displayEncodingArray();
         for (int i = 0; i < myString.length(); i++) {
-            intermidiate += encodingArray[myString.charAt(i)];
+            tmpString += encodingArray[myString.charAt(i)];
         }
 
         byte counter = 0; //количество добавленных нулей
-        for (int length = intermidiate.length(), kolZero = 8 - length % 8;
+        for (int length = tmpString.length(), kolZero = 8 - length % 8;
              counter < kolZero; counter++) {
-            intermidiate += "0";
+            tmpString += "0";
         }
 
 
-        compressed = String.format("%8s", Integer.toBinaryString(counter & 0xff)).replace(" ", "0") + intermidiate;
+        compressed = String.format("%8s", Integer.toBinaryString(counter & 0xff)).replace(" ", "0") + tmpString;
 
 
 
@@ -59,13 +59,13 @@ public class HuffmanOperator {
     public String extract(String compressed, String[] newEncodingArray) {
         String decompressed = "";
         String current = "";
-        String delta = "";
+        String kol = "";
         encodingArray = newEncodingArray;
 
 
         for (int i = 0; i < 8; i++)
-            delta += compressed.charAt(i);
-        int ADDED_ZEROES = Integer.parseInt(delta, 2);
+            kol += compressed.charAt(i);
+        int ADDED_ZEROES = Integer.parseInt(kol, 2);
 
         for (int i = 8, l = compressed.length() - ADDED_ZEROES; i < l; i++) {
 
