@@ -77,18 +77,7 @@ public class HuffmanTree {
         return encodingArray;
     }
 
-    public void displayEncodingArray() {
-        fillEncodingArray(huffmanTree.getRoot(), "", "");
 
-        System.out.println("Encoding table");
-        for (int i = 0; i < ENCODING_TABLE_SIZE; i++) {
-            if (freqArray[i] != 0) {
-                System.out.print((char) i + " ");
-                System.out.println(encodingArray[i]);
-            }
-        }
-        System.out.println("*********************************************");
-    }
 
 
     String getOriginalString() {

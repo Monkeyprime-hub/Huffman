@@ -40,23 +40,14 @@ public class HuffmanOperator {
         compressed = String.format("%8s", Integer.toBinaryString(counter & 0xff)).replace(" ", "0") + intermidiate;
 
 
-        setCompressionRatio();
+
 
         return compressed;
     }
 
-    private void setCompressionRatio() {    // считаем кеф
-        double sumA = 0, sumB = 0;
-        for (int i = 0; i < ENCODING_TABLE_SIZE; i++) {
-            if (freqArray[i] != 0) {
-                sumA += 8 * freqArray[i];
-                sumB += encodingArray[i].length() * freqArray[i];
-            }
-        }
-        ratio = sumA / sumB;
-    }
 
-    public byte[] getBytedMsg() {
+
+    public byte[] getByted() {
         StringBuilder compressedString = new StringBuilder(getCompressedString());
         byte[] compressedBytes = new byte[compressedString.length() / 8];
         for (int i = 0; i < compressedBytes.length; i++) {
@@ -99,19 +90,5 @@ public class HuffmanOperator {
         return enc;
     }
 
-    public double getCompressionRatio() {
-        return ratio;
-    }
 
-
-    public void displayEncodingArray() {
-        System.out.println("Encoding table");
-        for (int i = 0; i < ENCODING_TABLE_SIZE; i++) {
-            //if (freqArray[i] != 0) {
-            System.out.print((char) i + " ");
-            System.out.println(encodingArray[i]);
-            //}
-        }
-        System.out.println("******************************************");
-    }
 }
