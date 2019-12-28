@@ -59,7 +59,15 @@ public class HuffmaaanLetsGo {
             HuffmanOperator operator = new HuffmanOperator();
             File compressedFile = new File(filePath),
                     tableFile = new File(tablePath),
-                    extractedFile = new File(filePath + "q");
+                    extractedFile = new File(filePath);
+            if (filePath.contains(".")) {
+                filePath = filePath.substring(0, filePath.lastIndexOf('.'));
+                extractedFile = new File(filePath);
+            }
+//            filePath += "." + "txt";
+
+//            file.renameTo(new File(file.getParentFile(), filename));
+//            return file;
             String compressed = "";
             String[] encodingArray = new String[ENCODING_TABLE_SIZE];
 
